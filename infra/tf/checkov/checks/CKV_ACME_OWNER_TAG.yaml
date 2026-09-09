@@ -1,0 +1,12 @@
+metadata:
+  id: "CKV_ACME_OWNER_TAG"
+  name: "Le risorse principali devono avere il tag Owner"
+  category: "CONVENTION"
+
+definition:
+  cond_type: "attribute"
+  resource_types:
+    - "aws_s3_bucket"
+    - "aws_dynamodb_table"
+  attribute: "tags.Owner"
+  operator: "exists"

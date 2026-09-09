@@ -1,0 +1,6 @@
+# Copia questo file in impostazioni.txt solo per lo sviluppo locale.
+# Non inserire mai valori reali nel repository.
+FTP_HOST=
+FTP_USER=
+FTP_PASSWORD=
+AWS_REGION=us-east-1

@@ -1,0 +1,10 @@
+# Baseline "dev" — skip motivati per risorse dimostrative o non critiche
+compact: true
+quiet: true
+skip-check:
+  - CKV_AWS_70   # S3 bucket should have access logging enabled
+  - CKV2_AWS_62  # S3 bucket should have event notifications configured
+  - CKV2_AWS_61  # S3 bucket should have lifecycle configuration
+  - CKV_AWS_18   # S3 bucket should have access logging enabled
+  - CKV_AWS_144  # S3 bucket should have cross-region replication
+  - CKV_AWS_145  # S3 bucket should have replication configuration

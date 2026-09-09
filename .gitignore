@@ -1,0 +1,21 @@
+# Configurazione locale: non deve entrare nel repository.
+config/impostazioni.txt
+impostazioni.txt
+
+# Variabili d'ambiente e file locali.
+.env
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
