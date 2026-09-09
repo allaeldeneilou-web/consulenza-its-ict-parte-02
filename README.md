@@ -97,6 +97,10 @@ Per chiudere le evidenze che vivono fuori dai file servono impostazioni GitHub:
 Queste impostazioni non sono deducibili dal repository: vanno verificate nella
 console e documentate con gli screenshot richiesti dal laboratorio.
 
+Il ruleset `proteggi-main` e' attivo sulla repository e impedisce aggiornamenti
+diretti a `main`. I check della CI verranno aggiunti al ruleset dopo la prima
+pull request, quando GitHub avra' registrato i relativi risultati.
+
 ## Rollback
 
 Il rollback e' un revert Git su un branch dedicato, seguito da pull request,
