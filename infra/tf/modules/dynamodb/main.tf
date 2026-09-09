@@ -28,13 +28,18 @@ resource "aws_kms_key" "iscrizioni" {
   description             = "CMK per la tabella iscrizioni del portale ITS"
   enable_key_rotation     = true
   deletion_window_in_days = 7
-  policy                  = data.aws_iam_policy_document.iscrizioni_kms.json
 
   tags = {
     Owner            = "ITS-ICT"
     Repository       = "consulenza-its-ict"
     TechnicalContact = "allaeldene.ilou"
   }
+}
+
+resource "aws_kms_key_policy" "iscrizioni" {
+  count  = var.environment != "dev" ? 1 : 0
+  key_id = aws_kms_key.iscrizioni[0].id
+  policy = data.aws_iam_policy_document.iscrizioni_kms.json
 }
 
 resource "aws_kms_alias" "iscrizioni" {
