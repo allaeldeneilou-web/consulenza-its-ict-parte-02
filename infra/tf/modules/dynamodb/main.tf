@@ -6,11 +6,29 @@ variable "prefix" {
   type = string
 }
 
+data "aws_caller_identity" "current" {}
+
+data "aws_iam_policy_document" "iscrizioni_kms" {
+  statement {
+    sid    = "EnableAccountRootPermissions"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+}
+
 resource "aws_kms_key" "iscrizioni" {
   count                   = var.environment != "dev" ? 1 : 0
   description             = "CMK per la tabella iscrizioni del portale ITS"
   enable_key_rotation     = true
   deletion_window_in_days = 7
+  policy                  = data.aws_iam_policy_document.iscrizioni_kms.json
 
   tags = {
     Owner            = "ITS-ICT"
