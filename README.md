@@ -61,6 +61,7 @@ Il bucket S3 e' gestito come codice. Il codice attuale:
 - non concede `s3:*` a `Principal: "*"`;
 - abilita versioning;
 - abilita server-side encryption AES256;
+- cifra DynamoDB con una KMS Customer Managed Key a rotazione automatica;
 - separa gli ambienti tramite la variabile Terraform `environment`.
 
 La bucket policy pubblica non viene ristretta: viene rimossa. Il permesso di
