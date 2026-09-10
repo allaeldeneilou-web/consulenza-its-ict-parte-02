@@ -25,6 +25,12 @@ Data: 09/09/2026
 - **Rimedio**: configurare la cifratura server-side AES256 come risorsa IaC.
 - **Stato**: chiuso nel codice Terraform.
 
+### S4 - DynamoDB usava una cifratura senza chiave sotto controllo del cliente
+- **Fatto**: la tabella aveva la cifratura attiva, ma senza `kms_key_arn`; AWS usava quindi una chiave AWS-owned.
+- **Conseguenza**: il cliente non poteva governare direttamente rotazione, policy e audit della chiave secondo i propri requisiti.
+- **Rimedio**: creare una KMS Customer Managed Key con rotazione automatica, key policy esplicita limitata all'account e ARN passato alla tabella DynamoDB.
+- **Stato**: chiuso nel codice Terraform.
+
 ## Affidabilita
 
 ### A1 - Mancanza di versioning sul bucket

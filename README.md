@@ -61,6 +61,7 @@ Il bucket S3 e' gestito come codice. Il codice attuale:
 - non concede `s3:*` a `Principal: "*"`;
 - abilita versioning;
 - abilita server-side encryption AES256;
+- cifra DynamoDB con una KMS Customer Managed Key a rotazione automatica;
 - separa gli ambienti tramite la variabile Terraform `environment`.
 
 La bucket policy pubblica non viene ristretta: viene rimossa. Il permesso di
@@ -96,6 +97,10 @@ Per chiudere le evidenze che vivono fuori dai file servono impostazioni GitHub:
 
 Queste impostazioni non sono deducibili dal repository: vanno verificate nella
 console e documentate con gli screenshot richiesti dal laboratorio.
+
+Il ruleset `proteggi-main` e' attivo sulla repository e impedisce aggiornamenti
+diretti a `main`. I check della CI verranno aggiunti al ruleset dopo la prima
+pull request, quando GitHub avra' registrato i relativi risultati.
 
 ## Rollback
 
