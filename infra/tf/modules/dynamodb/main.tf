@@ -8,13 +8,13 @@ variable "prefix" {
 
 data "aws_caller_identity" "current" {}
 
-# This is the standard administrative policy for the CMK: the root principal
-# delegates key management to the account through IAM policies.
-# Generic IAM checks do not distinguish this case from an application policy.
-# checkov:skip=CKV_AWS_109:policy KMS standard necessaria per mantenere la gestione della CMK nell'account
-# checkov:skip=CKV_AWS_111:policy KMS standard necessaria per mantenere la gestione della CMK nell'account
-# checkov:skip=CKV_AWS_356:Resource '*' is required by KMS key policy syntax
 data "aws_iam_policy_document" "iscrizioni_kms" {
+  # This is the standard administrative policy for the CMK: the root principal
+  # delegates key management to the account through IAM policies.
+  # Generic IAM checks do not distinguish this case from an application policy.
+  # checkov:skip=CKV_AWS_109:policy KMS standard necessaria per mantenere la gestione della CMK nell'account
+  # checkov:skip=CKV_AWS_111:policy KMS standard necessaria per mantenere la gestione della CMK nell'account
+  # checkov:skip=CKV_AWS_356:Resource '*' is required by KMS key policy syntax
   statement {
     sid    = "EnableAccountRootPermissions"
     effect = "Allow"
