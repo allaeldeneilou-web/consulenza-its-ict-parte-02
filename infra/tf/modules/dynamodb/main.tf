@@ -8,6 +8,12 @@ variable "prefix" {
 
 data "aws_caller_identity" "current" {}
 
+# This is the standard administrative policy for the CMK: the root principal
+# delegates key management to the account through IAM policies.
+# Generic IAM checks do not distinguish this case from an application policy.
+# checkov:skip=CKV_AWS_109:policy KMS standard necessaria per mantenere la gestione della CMK nell'account
+# checkov:skip=CKV_AWS_111:policy KMS standard necessaria per mantenere la gestione della CMK nell'account
+# checkov:skip=CKV_AWS_356:Resource '*' is required by KMS key policy syntax
 data "aws_iam_policy_document" "iscrizioni_kms" {
   statement {
     sid    = "EnableAccountRootPermissions"
@@ -23,8 +29,12 @@ data "aws_iam_policy_document" "iscrizioni_kms" {
   }
 }
 
+locals {
+  kms_keys = var.environment != "dev" ? { current = true } : {}
+}
+
 resource "aws_kms_key" "iscrizioni" {
-  count                   = var.environment != "dev" ? 1 : 0
+  for_each                = local.kms_keys
   description             = "CMK per la tabella iscrizioni del portale ITS"
   enable_key_rotation     = true
   deletion_window_in_days = 7
@@ -37,15 +47,15 @@ resource "aws_kms_key" "iscrizioni" {
 }
 
 resource "aws_kms_key_policy" "iscrizioni" {
-  count  = var.environment != "dev" ? 1 : 0
-  key_id = aws_kms_key.iscrizioni[0].id
-  policy = data.aws_iam_policy_document.iscrizioni_kms.json
+  for_each = local.kms_keys
+  key_id   = aws_kms_key.iscrizioni[each.key].id
+  policy   = data.aws_iam_policy_document.iscrizioni_kms.json
 }
 
 resource "aws_kms_alias" "iscrizioni" {
-  count         = var.environment != "dev" ? 1 : 0
+  for_each      = local.kms_keys
   name          = "alias/${var.prefix}-iscrizioni"
-  target_key_id = aws_kms_key.iscrizioni[0].key_id
+  target_key_id = aws_kms_key.iscrizioni[each.key].key_id
 }
 
 resource "aws_dynamodb_table" "iscrizioni" {
@@ -61,7 +71,7 @@ resource "aws_dynamodb_table" "iscrizioni" {
 
   server_side_encryption {
     enabled     = true
-    kms_key_arn = aws_kms_key.iscrizioni[0].arn
+    kms_key_arn = aws_kms_key.iscrizioni["current"].arn
   }
 
   point_in_time_recovery {
